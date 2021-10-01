@@ -1,27 +1,20 @@
-<html>
+<?php require 'utils.php';
 
-    <body>
-        <?php
-            $receivedUsername = $_POST['username'];
-            $receivedPassword = $_POST['password'];
-            
-            $found = 0;
+if (!isset($_POST['user'])) {
+    redirect('../client/login.html');
+}
 
-            foreach(file('../database/users.txt') as $line ) {
-                list($username, $password) = explode(",", $line);
+$user = $_POST['user'];
 
-                if ($receivedUsername == $username){
-                    $found = 1;
-                }
-            }
-
-            if ($found == 1) {
-                echo "Username already exists. Click <a href='../client/register.html'>HERE</a> to try again.";
-            } else {
-                $file = fopen("../database/users.txt", "a");
-                fwrite($file, $receivedUsername.",".$receivedPassword."\n");
-                fclose($file);
-                echo "Registration successful. Click <a href='../client/login.html'>HERE</a> to login.";
-            }
-        ?>
-</html>
+if (user_exists($user)) {
+    echo '<p>The user already exists.</p><br>';
+    echo '<a href="../client/register.html">Go back to Register</a><br>';
+} else {
+    $file = fopen('../database/users.txt', 'a');
+    $record = $user . ',' . $_POST['pwd'];
+    fwrite($file, $record . "\n");
+    fclose($file);
+    generate_initial_cart($user);
+    echo '<p>Registration successful!</p><br>';
+}
+echo '<a href="../client/login.html">Go to Login</a>';

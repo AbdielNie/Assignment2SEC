@@ -1,32 +1,26 @@
-<html>
-    <script src="js/sha256.js"></script>
-    <script src="js/rsa.js"></script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
 <body>
-    <h3>Secure Electronic Commerce Assignment</h3>
+<div id="welcome"></div>
+<h3>Login Now!</h3>
+<form action="../server/login.php" method="post">
+    <label>Username: <input id="user" name="user" type="text"></label>
+    <br>
+    <label>Password: <input id="pwd" name="pwd" type="password"></label>
+    <br>
+    <button id="submit" type="submit" onclick="hash('pwd')">Login</button>
+</form>
+<p>Don't have an account? <a href="register.html">Register</a></p>
 
-    <form action="../server/login.php" method="POST">
-
-        <h4>Username:</h4> <input id="username" type="text" name="username"> <!--removed maxlength-->
-        <br /><br />
-        <h4>Password: </h4> <input id="password" type="password" name="password" maxlength="256">
-        <div id="error"></div>
-        <br /><br />
-
-        <button id="button" type="submit" onclick="encrypt()">LOGIN</button>
-    </form>
-
-    <script type="text/javascript">
-
-        function encrypt() {
-
-            var password = document.getElementById('password').value;
-            var hashed_pwd = SHA256.hash(password);
-            document.getElementById('password').innerHTML = hashed_pwd;
-            document.getElementById('password').value = hashed_pwd;
-        }
-
-    </script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="javascript/jquery.js"></script>
+<script src="javascript/sha256.js"></script>
+<script src="javascript/utils.js"></script>
+<script>
+    $('#welcome').showWelcome()
+</script>
 </body>
-
 </html>

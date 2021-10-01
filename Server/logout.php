@@ -1,6 +1,7 @@
-<?php
+<?php session_start();
+require 'utils.php';
 
-  session_start();
-  unset($_SESSION['user']);
-  header('Location: ../client/');
- ?>
+session_destroy();
+$_SESSION = [];
+redirect('../client/login.html');
+

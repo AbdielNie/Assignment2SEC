@@ -1,25 +1,25 @@
-<?php
-    session_start();
-    include("files/rsa.php");
+<?php session_start();
+require 'utils.php';
 
-    $receivedUsername = $_POST['username'];
-    $receivedPassword = $_POST['password'];
-    
-    foreach(file('../database/users.txt') as $line) {
+if (!isset($_POST['user'])) {
+    redirect('../client/login.html');
+}
 
-        list($username, $password) = explode(",", $line);
+$user = $_POST['user'];
+$pwd = $_POST['pwd'];
+$record = $user . ',' . $pwd;
 
-        if($receivedUsername == $username) {
-            $found = 1;
-
-            if ($receivedPassword."\n" == $password) {
-                $_SESSION['user'] = $username;
-                header('Location: ../client/cart.php');
-            } else {
-                echo "Wrong Password. Click <a href='../client/login.html'>HERE</a> to try again.";
-            }
-        } else {
-            echo "User not found. Click <a href='../client/login.html'>HERE</a> to try again.";
-        }
-    }
-?>
+if (!user_exists($user)) {
+    echo '<p>Incorrect Username.</p><br>';
+    echo '<a href="../client/login.html">Try Again.</a>';
+} elseif (verify_login($record)) {
+    $_SESSION['user'] = $user;
+    $cart_content = get_cart_content($user);
+    $credit_card = get_credit_card($user);
+    $_SESSION['cart'] = $cart_content;
+    $_SESSION['cc'] = $credit_card;
+    redirect('../client/cart.php');
+} else {
+    echo '<p>Incorrect Password.</p><br>';
+    echo '<a href="../client/login.html">Try Again.</a>';
+}
